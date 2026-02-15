@@ -45,7 +45,7 @@ export function Sidebard({ collapsed = false }: SidebarProps) {
   return (
     <>
       {/* ========== MOBILE SIDEBAR ========== */}
-      <div className="md:hidden flex items-center justify-between p-4 border-b bg-zinc-900 text-white">
+      <div className="md:hidden flex items-center justify-between p-4 border-b bg-background">
         <h2 className="font-bold text-lg">Admin Panel</h2>
         <Sheet>
           <SheetTrigger asChild>
@@ -87,7 +87,7 @@ export function Sidebard({ collapsed = false }: SidebarProps) {
       {/* ========== DESKTOP SIDEBAR ========== */}
       <aside
         className={cn(
-          "hidden md:flex flex-col h-screen bg-zinc-900 text-white transition-all duration-300",
+          "hidden md:flex flex-col h-screen bg-background transition-all duration-100",
           collapsed ? "w-20" : "w-64"
         )}
       >
@@ -114,7 +114,7 @@ export function Sidebard({ collapsed = false }: SidebarProps) {
                 <Button
                   variant={isActive ? "secondary" : "ghost"}
                   className={cn(
-                    "w-full justify-start gap-3 transition-all duration-300",
+                    "w-full justify-start gap-3 transition-all duration-100",
                     collapsed && "justify-center"
                   )}
                 >
