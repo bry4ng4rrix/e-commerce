@@ -1,3 +1,11 @@
-export default function Page() {
-  return <p>Etudiants</p>;
+
+const page = () => {
+  return (
+    <div className="min-h-screen">
+
+
+    </div>
+  )
 }
+
+export default page
