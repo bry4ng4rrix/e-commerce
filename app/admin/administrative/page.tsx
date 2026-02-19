@@ -193,12 +193,12 @@ const AdministrativePage = () => {
               </CardContent>
             </Card>
           </div>
-
+{/* dettes */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>Liste des paiements</CardTitle>
-                <CardDescription>Gérez tous les paiements et dettes</CardDescription>
+                <CardTitle>Élèves avec dettes</CardTitle>
+                <CardDescription>Liste des élèves ayant des dettes en cours</CardDescription>
               </div>
               <Dialog open={showAddPaymentDialog} onOpenChange={setShowAddPaymentDialog}>
                 <DialogTrigger asChild>
@@ -214,8 +214,8 @@ const AdministrativePage = () => {
                   </DialogHeader>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="student-name">Nom de l'élève</Label>
-                      <Input id="student-name" placeholder="Nom de l'élève" />
+                      <Label htmlFor="student-matricule">Matricule de l'élève</Label>
+                      <Input id="student-matricule" placeholder="Matricule de l'élève" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="amount">Montant (Ar)</Label>
@@ -249,8 +249,7 @@ const AdministrativePage = () => {
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setShowAddPaymentDialog(false)}>Annuler</Button>
-                    <Button onClick={handleAddPayment}>Ajouter</Button>
+                    <Button onClick={handleAddPayment} className='bg-green-400'>Ajouter</Button>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
@@ -259,7 +258,7 @@ const AdministrativePage = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Élève</TableHead>
+                    <TableHead>Matricule</TableHead>
                     <TableHead>Montant</TableHead>
                     <TableHead>Type</TableHead>
                     <TableHead>Date</TableHead>
@@ -268,7 +267,7 @@ const AdministrativePage = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {payments.map((payment) => (
+                  {payments.filter(payment => payment.status === 'overdue').map((payment) => (
                     <TableRow key={payment.id}>
                       <TableCell className="font-medium">{payment.studentName}</TableCell>
                       <TableCell>{payment.amount.toLocaleString()} Ar</TableCell>
