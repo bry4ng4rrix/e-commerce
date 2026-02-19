@@ -8,6 +8,7 @@ import {
   Home,
   Users,
   Settings, 
+  ClipboardClock ,
   Mail,
   BarChart,
   BookOpen,
@@ -29,7 +30,7 @@ const menuItems = [
   { name: "Etudiants", href: "/admin/etudiants", icon: Users },
   { name: "Enseignants", href: "/admin/prof", icon: BookOpen },
   { name: "Académique", href: "/admin/academique", icon: LayersPlus },
-  { name: "Notes et Evaluations", href: "/admin/note", icon: BarChart },
+  { name: "Demande", href: "/admin/demande", icon: ClipboardClock },
   { name: "Communication", href: "/admin/comunication", icon: Mail },
   ]
 
