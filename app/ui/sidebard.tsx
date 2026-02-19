@@ -7,13 +7,17 @@ import {
   Menu,
   Home,
   Users,
-  Settings,
+  Settings, 
+  Mail,
   BarChart,
+  BookOpen,
+  LayersPlus,
   Moon,
   Sun,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 
 interface SidebarProps {
@@ -21,11 +25,13 @@ interface SidebarProps {
 }
 
 const menuItems = [
-  { name: "Dashboard", href: "/admin", icon: Home },
-  { name: "Users", href: "/admin/users", icon: Users },
-  { name: "Analytics", href: "/admin/analytics", icon: BarChart },
-  { name: "Settings", href: "/admin/settings", icon: Settings },
-]
+  { name: "Tableau de bord", href: "/admin", icon: Home },
+  { name: "Etudiants", href: "/admin/etudiants", icon: Users },
+  { name: "Enseignants", href: "/admin/prof", icon: BookOpen },
+  { name: "Académique", href: "/admin/academique", icon: LayersPlus },
+  { name: "Notes et Evaluations", href: "/admin/note", icon: BarChart },
+  { name: "Communication", href: "/admin/comunication", icon: Mail },
+  ]
 
 export function Sidebard({ collapsed = false }: SidebarProps) {
   const pathname = usePathname()
@@ -45,8 +51,8 @@ export function Sidebard({ collapsed = false }: SidebarProps) {
   return (
     <>
       {/* ========== MOBILE SIDEBAR ========== */}
-      <div className="md:hidden flex items-center justify-between p-4 border-b bg-background">
-        <h2 className="font-bold text-lg">Admin Panel</h2>
+      <div className="md:hidden flex items-center justify-between p-4 border-b">
+        <h2 className="font-bold text-lg">Page d'admin</h2>
         <Sheet>
           <SheetTrigger asChild>
             <Button size="icon" variant="ghost">
@@ -55,14 +61,14 @@ export function Sidebard({ collapsed = false }: SidebarProps) {
           </SheetTrigger>
 
           <SheetContent side="left" className="w-64 p-6">
-            <div className="space-y-4">
+            <div className="space-y-4 ">
               {menuItems.map((item) => {
                 const isActive = pathname === item.href
                 return (
                   <Link key={item.name} href={item.href}>
                     <Button
                       variant={isActive ? "secondary" : "ghost"}
-                      className="w-full justify-start gap-3"
+                      className={`w-full justify-start gap-3 ${isActive ? "bg-blue-400" : ""}`}
                     >
                       <item.icon size={18} />
                       {item.name}
@@ -93,7 +99,7 @@ export function Sidebard({ collapsed = false }: SidebarProps) {
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
-          {!collapsed && <h2 className="text-xl font-bold">Admin Panel</h2>}
+          {!collapsed && <h2 className="text-xl font-bold">Page d'admin</h2>}
 
           {/* Bouton toggle uniquement ici */}
           <Button
@@ -128,6 +134,7 @@ export function Sidebard({ collapsed = false }: SidebarProps) {
 
         {/* Footer */}
         <div className="p-4 border-t">
+           
           <Button
             variant="outline"
             className={cn("w-full gap-2", collapsed && "justify-center")}

@@ -14,11 +14,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [])
 
   return (
-    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden bg-background">
+    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden  ">
       
       {/* Sidebar */}
       <div
-        className={`flex-none bg-background transition-all duration-300
+        className={`flex-none  transition-all duration-300 border-r border-red-500
           ${collapsed ? "w-20" : "w-64"} md:h-screen`}
       >
         <Sidebard collapsed={collapsed} />
