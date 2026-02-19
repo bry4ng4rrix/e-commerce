@@ -53,7 +53,7 @@ const page = () => {
       </div>
 
       <main className="max-h-2xl h-full  flex w-full gap-3">
-        <Card className="w-full   rounded-sm  shadow-none p-5 max-h-96 ">
+        <Card className="w-full   rounded-sm border-dashed  shadow-none p-5 max-h-96 ">
           <CardHeader className=" flex items-center gap-3">
 
             <Hourglass />
@@ -85,7 +85,7 @@ const page = () => {
             ))}
           </CardContent>
         </Card>
-        <Card className="container w-2/3  h-full max-h-96 shadow-none rounded-sm">
+        <Card className="container w-2/3  h-full max-h-96 shadow-none rounded-sm border-dashed">
           <CardHeader>
             <span className="flex items-center gap-3"><ClipboardClock />
               <p className="font-semibold">Absence ou retard </p></span>
@@ -118,7 +118,7 @@ const page = () => {
           </CardContent>
         </Card>
       </main>
-      <Card className="border h-2/3 max-h-72 rounded">
+      <Card className="border h-2/3 max-h-72 rounded border-dashed">
         <CardHeader>
           <span className="flex items-start gap-2 font-semibold"><CalendarDays />Demande des Reunion</span>
 

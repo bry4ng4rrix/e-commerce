@@ -554,7 +554,8 @@ export default function Page() {
                 {/* EDIT */}
                 <Button
                   size="icon"
-                  variant="secondary"
+                  variant="outline"
+                  className="bg-green-200"
                   onClick={() => {
                     setForm(e)
                     setOpenEdit(true)
@@ -696,7 +697,7 @@ export default function Page() {
 
               <div>
                 <h3 className="font-semibold mb-3">
-                  Écolage (Janvier → Décembre)
+                  Écolage
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {months.map((m) => (
@@ -705,7 +706,7 @@ export default function Page() {
                       variant={
                         selected.ecolage[m] ? "default" : "secondary"
                       }
-                      className={selected.ecolage[m] ? "bg-green-400 " : "bg-red-500 text-white"}
+                      className={"shadow-md " + (selected.ecolage[m] ? "bg-green-400 " : "bg-red-500 text-white")}
 
                     >
                       {m.charAt(0).toUpperCase() + m.slice(1)} :{" "}

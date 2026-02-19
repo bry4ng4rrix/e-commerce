@@ -12,36 +12,24 @@ const statItems = [
     titre: "Élèves inscrits",
     nombre: 16,
     icon: Users,
-    color: "text-sky-500",
-    bg: "bg-sky-50",
-    border: "border-sky-100",
     trend: "+2 ce mois",
   },
   {
     titre: "Professeurs",
     nombre: 15,
     icon: BookOpen,
-    color: "text-violet-500",
-    bg: "bg-violet-50",
-    border: "border-violet-100",
     trend: "Actifs",
   },
   {
     titre: "Classes",
     nombre: 20,
     icon: LayersPlus,
-    color: "text-emerald-500",
-    bg: "bg-emerald-50",
-    border: "border-emerald-100",
     trend: "2 nouvelles",
   },
   {
     titre: "Moyenne générale",
     nombre: "10/20",
     icon: BarChart,
-    color: "text-amber-500",
-    bg: "bg-amber-50",
-    border: "border-amber-100",
     trend: "↑ +0.5",
   },
 ]
@@ -73,7 +61,7 @@ const Page = () => {
    {/* header */}
     <div className="flex items-center justify-between mb-2">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-blue-50 tracking-tight">
             Tableau de bord
           </h1>
           <p className="text-sm text-slate-400 mt-0.5">
@@ -88,33 +76,31 @@ const Page = () => {
           En ligne
         </Badge>
       </div>
-
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
         {statItems.map((item, i) => (
           <Card
             key={item.titre}
             className={cn(
-              "border shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-default rounded-2xl bg-white dark:bg-transparent overflow-hidden",
-              item.border
+              "border shadow-sm rounded-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-default hover:bg-sky-100 dark:hover:bg-sky-900/20  overflow-hidden"
             )}
             style={{ animationDelay: `${i * 60}ms` }}
           >
             <CardHeader className=" px-5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-zinc-50">
+                <span className="text-xs font-semibold  tracking-widest text-slate-400 dark:text-zinc-50">
                   {item.titre}
                 </span>
-                <div className={cn("p-2 rounded-xl", item.bg)}>
-                  <item.icon size={16} className={item.color} />
+                <div className={cn("p-2 rounded-xl")}>
+                  <item.icon size={16} />
                 </div>
               </div>
             </CardHeader>
             <CardContent className="px-5">
-              <p className="text-3xl font-bold text-slate-800 tracking-tight">
+              <h1 className="text-3xl font-bold text-slate-800 dark:text-blue-50 tracking-tight">
                 {item.nombre}
-              </p>
-              <p className={cn("text-xs mt-1 font-medium", item.color)}>
+              </h1>
+              <p className={cn("text-xs mt-1 font-medium")}>
                 {item.trend}
               </p>
             </CardContent>
@@ -123,7 +109,7 @@ const Page = () => {
       </div>
 
       {/* Activity Feed */}
-      <Card className="rounded-2xl border border-zinc-200 shadow-sm  overflow-hidden">
+      <Card className="rounded-sm border border-zinc-200 shadow-sm  overflow-hidden">
         <CardHeader className="px-6">
           <div className="flex justify-between items-center">
             <div>
@@ -131,7 +117,7 @@ const Page = () => {
             <div className="p-1.5 rounded-lg bg-slate-100">
               <Activity size={15} className="text-slate-500" />
             </div>
-            <h3 className="font-semibold text-slate-700 text-sm tracking-tight">
+            <h3 className="font-semibold text-slate-700 dark:text-slate-200 text-sm tracking-tight">
               Activités récentes
             </h3>
           </div>
@@ -147,14 +133,14 @@ const Page = () => {
             return (
               <div
                 key={`${item.titre}-${i}`}
-                className="group flex items-center justify-between gap-4 px-4 py-3 rounded-xl hover:bg-slate-50 transition-colors duration-150 cursor-default"
+                className="group flex items-center justify-between gap-4 px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-300 cursor-default"
               >
                 <div className="flex items-center gap-3">
                   <div className={cn("p-2 rounded-xl shrink-0", iconClass)}>
                     <item.icon size={14} />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-slate-700 leading-tight">
+                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200  leading-tight">
                       {item.titre}
                     </p>
                     <p className="text-xs text-slate-400 mt-0.5">

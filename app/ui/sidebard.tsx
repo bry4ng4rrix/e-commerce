@@ -29,7 +29,7 @@ const menuItems = [
   { name: "Tableau de bord", href: "/admin", icon: Home },
   { name: "Etudiants", href: "/admin/etudiants", icon: Users },
   { name: "Enseignants", href: "/admin/prof", icon: BookOpen },
-  { name: "Académique", href: "/admin/academique", icon: LayersPlus },
+  { name: "Administrative", href: "/admin/administrative", icon: LayersPlus },
   { name: "Demande", href: "/admin/demande", icon: ClipboardClock },
   { name: "Communication", href: "/admin/comunication", icon: Mail },
   ]
@@ -68,8 +68,7 @@ export function Sidebard({ collapsed = false }: SidebarProps) {
                 return (
                   <Link key={item.name} href={item.href}>
                     <Button
-                      variant={isActive ? "secondary" : "ghost"}
-                      className={`w-full justify-start gap-3 ${isActive ? "bg-blue-400" : ""}`}
+                      className={`w-full justify-start gap-3 ${isActive ? "bg-blue-400 border border-slate-400" : ""}`}
                     >
                       <item.icon size={18} />
                       {item.name}
