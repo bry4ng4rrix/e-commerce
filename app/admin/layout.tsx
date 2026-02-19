@@ -25,7 +25,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
 
       {/* Main content */}
-      <div className="grow p-4 md:overflow-y-auto md:p-12 transition-all duration-300">
+      <div className="grow p-3 md:overflow-y-auto  transition-all duration-300">
         {children}
       </div>
     </div>
