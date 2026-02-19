@@ -18,7 +18,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       
       {/* Sidebar */}
       <div
-        className={`flex-none  transition-all duration-300 border-r border-red-500
+        className={`flex-none  transition-all duration-300 
           ${collapsed ? "w-20" : "w-64"} md:h-screen`}
       >
         <Sidebard collapsed={collapsed} />
