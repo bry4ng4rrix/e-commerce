@@ -15,10 +15,11 @@ import {
   LayersPlus,
   Moon,
   Sun,
+  BookText,
+  Calendar,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 
 interface SidebarProps {
@@ -27,11 +28,12 @@ interface SidebarProps {
 
 const menuItems = [
   { name: "Tableau de bord", href: "/etudiant", icon: Home },
-  { name: "Etudiants", href: "/etudiant/etudiants", icon: Users },
-  { name: "Enseignants", href: "/etudiant/prof", icon: BookOpen },
-  { name: "etudiantistrative", href: "/etudiant/etudiantistrative", icon: LayersPlus },
-  { name: "Demande", href: "/etudiant/demande", icon: ClipboardClock },
+  { name: "EDT", href: "/etudiant/edt", icon: Calendar },
+  { name: "Note", href: "/etudiant/note", icon: ClipboardClock },
+  { name: "Document", href: "/etudiant/document", icon: BookText },
+  { name: "Demande", href: "/etudiant/demande", icon: LayersPlus },
   { name: "Communication", href: "/etudiant/comunication", icon: Mail },
+  { name: "Profile", href: "/etudiant/profile", icon: Settings }
   ]
 
 export function Sidebard({ collapsed = false }: SidebarProps) {
