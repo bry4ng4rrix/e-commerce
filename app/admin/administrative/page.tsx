@@ -296,8 +296,6 @@ const AdministrativePage = () => {
         </TabsContent>
 
         {/* Documents Tab */}
-
-        
         <TabsContent value="documents">
           <div className="space-y-6">
           <Card>

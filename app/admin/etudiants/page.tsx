@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useState } from "react"
 import {
@@ -21,7 +21,11 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Eye, Edit, Trash, Plus } from "lucide-react"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import { Eye, Edit, Trash, Plus, Users } from "lucide-react"
+import { SimpleBarChart } from "@/components/charts/bar-chart"
+import { SimplePieChart } from "@/components/charts/pie-chart"
 
 type Ecolage = {
   janvier: boolean
@@ -400,28 +404,42 @@ export default function Page() {
     })
   }
 
+  // Chart data for absences
+  const absenceData = filteredData
+    .sort((a, b) => b.absences - a.absences)
+    .slice(0, 5)
+    .map((e) => ({
+      name: `${e.nom} ${e.prenom}`,
+      value: e.absences,
+    }))
+
   return (
-    <div className="min-h-screen p-6 space-y-6">
-      <header className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Gestion des Étudiants</h1>
+    <div className="space-y-6 p-4 md:p-6">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Gestion des Étudiants</h1>
+          <p className="text-sm text-muted-foreground mt-1">Gérez les informations des élèves et leurs paiements</p>
+        </div>
 
         {/* ADD DIALOG */}
         <Dialog open={openAdd} onOpenChange={setOpenAdd}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Plus size={16} /> Ajouter
+            <Button className="gap-2 rounded-lg">
+              <Plus className="w-4 h-4" /> Ajouter un étudiant
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl rounded-lg">
             <DialogHeader>
               <DialogTitle>Ajouter un étudiant</DialogTitle>
             </DialogHeader>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <Label>Matricule</Label>
+                <Label className="text-sm">Matricule</Label>
                 <Input
                   type="number"
+                  placeholder="Ex: 1009"
                   onChange={(e) =>
                     setForm({ ...form, matricule: Number(e.target.value) })
                   }
@@ -429,8 +447,9 @@ export default function Page() {
               </div>
 
               <div>
-                <Label>Classe</Label>
+                <Label className="text-sm">Classe</Label>
                 <Input
+                  placeholder="Ex: 2nd A"
                   onChange={(e) =>
                     setForm({ ...form, classe: e.target.value })
                   }
@@ -438,15 +457,17 @@ export default function Page() {
               </div>
 
               <div>
-                <Label>Nom</Label>
+                <Label className="text-sm">Nom</Label>
                 <Input
+                  placeholder="Nom de l'étudiant"
                   onChange={(e) => setForm({ ...form, nom: e.target.value })}
                 />
               </div>
 
               <div>
-                <Label>Prénom</Label>
+                <Label className="text-sm">Prénom</Label>
                 <Input
+                  placeholder="Prénom"
                   onChange={(e) =>
                     setForm({ ...form, prenom: e.target.value })
                   }
@@ -454,8 +475,9 @@ export default function Page() {
               </div>
 
               <div>
-                <Label>Nom du parent</Label>
+                <Label className="text-sm">Nom du parent</Label>
                 <Input
+                  placeholder="Nom du parent"
                   onChange={(e) =>
                     setForm({ ...form, parent: e.target.value })
                   }
@@ -463,16 +485,18 @@ export default function Page() {
               </div>
 
               <div>
-                <Label>Téléphone parent</Label>
+                <Label className="text-sm">Téléphone parent</Label>
                 <Input
+                  placeholder="Numéro de téléphone"
                   onChange={(e) => setForm({ ...form, tel: e.target.value })}
                 />
               </div>
 
-              <div className="col-span-2">
-                <Label>Email parent</Label>
+              <div className="sm:col-span-2">
+                <Label className="text-sm">Email parent</Label>
                 <Input
                   type="email"
+                  placeholder="Email parent"
                   onChange={(e) =>
                     setForm({ ...form, email: e.target.value })
                   }
@@ -480,115 +504,206 @@ export default function Page() {
               </div>
             </div>
 
-            <DialogFooter>
-              <Button onClick={handleAdd}>Enregistrer</Button>
+            <DialogFooter className="gap-2">
+              <Button variant="outline" onClick={() => setOpenAdd(false)}>
+                Annuler
+              </Button>
+              <Button onClick={handleAdd} className="rounded-lg">Enregistrer</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </header>
-
-      {/* TABLE */}
-      <div className=" rounded-sm p-2">
-        {/* Filtre par classe */}
-        <div className="flex items-center gap-4 mb-4">
-          <span className="font-semibold">Classe :</span>
-          <Button
-            variant={selectedClasse === "Toutes" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedClasse("Toutes")}
-          >
-            Toutes
-          </Button>
-          {classes.map((classe) => (
-            <Button
-              key={classe}
-              variant={selectedClasse === classe ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSelectedClasse(classe)}
-            >
-              {classe}
-            </Button>
-          ))}
-        </div>
-
-        <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Matricule</TableHead>
-            <TableHead>Nom</TableHead>
-            <TableHead>Classe</TableHead>
-            <TableHead>Parent</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Absences</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {filteredData.map((e) => (
-            <TableRow key={e.matricule}>
-              <TableCell>{e.matricule}</TableCell>
-              <TableCell>
-                {e.nom} {e.prenom}
-              </TableCell>
-              <TableCell>{e.classe}</TableCell>
-              <TableCell>{e.parent}</TableCell>
-              <TableCell>
-                <Badge variant="default">{e.status}</Badge>
-              </TableCell>
-              <TableCell>{e.absences}</TableCell>
-
-              <TableCell className="flex justify-end gap-2">
-                {/* DETAIL */}
-                <Button
-                  size="icon"
-                  variant="outline"
-                  onClick={() => {
-                    setSelected(e)
-                    setOpenDetail(true)
-                  }}
-                >
-                  <Eye size={16} />
-                </Button>
-
-                {/* EDIT */}
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className="bg-green-200"
-                  onClick={() => {
-                    setForm(e)
-                    setOpenEdit(true)
-                  }}
-                >
-                  <Edit size={16} />
-                </Button>
-
-                {/* DELETE */}
-                <Button
-                  size="icon"
-                  variant="destructive"
-                  onClick={() => handleDelete(e.matricule)}
-                >
-                  <Trash size={16} />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-
       </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <Card className="rounded-lg">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 w-10 h-10 flex items-center justify-center mx-auto mb-2">
+                <Users className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              </div>
+              <p className="text-2xl font-bold text-foreground">{filteredData.length}</p>
+              <p className="text-xs text-muted-foreground mt-1">Étudiants</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="rounded-lg">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/30 w-10 h-10 flex items-center justify-center mx-auto mb-2">
+                <Badge className="bg-green-600">✓</Badge>
+              </div>
+              <p className="text-2xl font-bold text-foreground">{filteredData.filter(e => e.droitInscription).length}</p>
+              <p className="text-xs text-muted-foreground mt-1">Payés</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="rounded-lg">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <div className="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 w-10 h-10 flex items-center justify-center mx-auto mb-2">
+                <Badge className="bg-red-600">!</Badge>
+              </div>
+              <p className="text-2xl font-bold text-foreground">{filteredData.filter(e => !e.droitInscription).length}</p>
+              <p className="text-xs text-muted-foreground mt-1">Non payés</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        {/* Absences Chart */}
+        {absenceData.length > 0 && (
+          <Card className="rounded-lg">
+            <CardHeader>
+              <h3 className="text-lg font-semibold text-foreground">Top 5 - Absences</h3>
+            </CardHeader>
+            <CardContent>
+              <SimpleBarChart 
+                data={absenceData}
+                colors={['#ef4444']}
+              />
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Payment Status Chart */}
+        <Card className="rounded-lg">
+          <CardHeader>
+            <h3 className="text-lg font-semibold text-foreground">Statut de paiement</h3>
+          </CardHeader>
+          <CardContent>
+            <SimplePieChart
+              data={[
+                {
+                  name: 'Payés',
+                  value: filteredData.filter(e => e.droitInscription).length,
+                },
+                {
+                  name: 'Non payés',
+                  value: filteredData.filter(e => !e.droitInscription).length,
+                },
+              ]}
+              colors={['#10b981', '#ef4444']}
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Filter and Table */}
+      <Card className="rounded-lg">
+        <CardHeader className="pb-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <span className="font-semibold text-foreground">Classe:</span>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant={selectedClasse === "Toutes" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSelectedClasse("Toutes")}
+                className="rounded-lg"
+              >
+                Toutes
+              </Button>
+              {classes.map((classe) => (
+                <Button
+                  key={classe}
+                  variant={selectedClasse === classe ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedClasse(classe)}
+                  className="rounded-lg"
+                >
+                  {classe}
+                </Button>
+              ))}
+            </div>
+          </div>
+        </CardHeader>
+        <Separator />
+        <CardContent className="pt-4">
+          {/* Responsive Table */}
+          <div className="overflow-x-auto rounded-lg border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-xs md:text-sm">Matricule</TableHead>
+                  <TableHead className="text-xs md:text-sm">Nom</TableHead>
+                  <TableHead className="hidden sm:table-cell text-xs md:text-sm">Classe</TableHead>
+                  <TableHead className="hidden md:table-cell text-xs md:text-sm">Parent</TableHead>
+                  <TableHead className="text-xs md:text-sm">Status</TableHead>
+                  <TableHead className="text-right text-xs md:text-sm">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+
+              <TableBody>
+                {filteredData.map((e) => (
+                  <TableRow key={e.matricule}>
+                    <TableCell className="text-xs md:text-sm">{e.matricule}</TableCell>
+                    <TableCell className="text-xs md:text-sm">
+                      {e.nom} {e.prenom}
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell text-xs md:text-sm">{e.classe}</TableCell>
+                    <TableCell className="hidden md:table-cell text-xs md:text-sm">{e.parent}</TableCell>
+                    <TableCell className="text-xs md:text-sm">
+                      <Badge 
+                        variant={e.droitInscription ? "default" : "destructive"}
+                        className={e.droitInscription ? "bg-green-600" : "bg-red-600"}
+                      >
+                        {e.droitInscription ? "Payé" : "Non payé"}
+                      </Badge>
+                    </TableCell>
+
+                    <TableCell className="flex justify-end gap-1">
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-8 w-8 rounded-md"
+                        onClick={() => {
+                          setSelected(e)
+                          setOpenDetail(true)
+                        }}
+                      >
+                        <Eye className="w-4 h-4" />
+                      </Button>
+
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-8 w-8 rounded-md"
+                        onClick={() => {
+                          setForm(e)
+                          setOpenEdit(true)
+                        }}
+                      >
+                        <Edit className="w-4 h-4" />
+                      </Button>
+
+                      <Button
+                        size="icon"
+                        variant="destructive"
+                        className="h-8 w-8 rounded-md"
+                        onClick={() => handleDelete(e.matricule)}
+                      >
+                        <Trash className="w-4 h-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
       {/* EDIT DIALOG */}
       <Dialog open={openEdit} onOpenChange={setOpenEdit}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl rounded-lg">
           <DialogHeader>
             <DialogTitle>Modifier l'étudiant</DialogTitle>
           </DialogHeader>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Nom</Label>
+              <Label className="text-sm">Nom</Label>
               <Input
                 value={form.nom}
                 onChange={(e) => setForm({ ...form, nom: e.target.value })}
@@ -596,7 +711,7 @@ export default function Page() {
             </div>
 
             <div>
-              <Label>Prénom</Label>
+              <Label className="text-sm">Prénom</Label>
               <Input
                 value={form.prenom}
                 onChange={(e) => setForm({ ...form, prenom: e.target.value })}
@@ -604,7 +719,7 @@ export default function Page() {
             </div>
 
             <div>
-              <Label>Date de naissance</Label>
+              <Label className="text-sm">Date de naissance</Label>
               <Input
                 type="date"
                 value={form.dateNaissance}
@@ -615,7 +730,7 @@ export default function Page() {
             </div>
 
             <div>
-              <Label>Adresse</Label>
+              <Label className="text-sm">Adresse</Label>
               <Input
                 value={form.adresse}
                 onChange={(e) =>
@@ -625,7 +740,7 @@ export default function Page() {
             </div>
 
             <div>
-              <Label>Téléphone parent</Label>
+              <Label className="text-sm">Téléphone parent</Label>
               <Input
                 value={form.tel}
                 onChange={(e) => setForm({ ...form, tel: e.target.value })}
@@ -633,7 +748,7 @@ export default function Page() {
             </div>
 
             <div>
-              <Label>Email parent</Label>
+              <Label className="text-sm">Email parent</Label>
               <Input
                 type="email"
                 value={form.email}
@@ -642,75 +757,85 @@ export default function Page() {
             </div>
           </div>
 
-          <DialogFooter>
-            <Button onClick={handleEdit}>Mettre à jour</Button>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setOpenEdit(false)}>
+              Annuler
+            </Button>
+            <Button onClick={handleEdit} className="rounded-lg">Mettre à jour</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* DETAIL DIALOG */}
       <Dialog open={openDetail} onOpenChange={setOpenDetail}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-3xl rounded-lg max-h-96 overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Détails de l'étudiant</DialogTitle>
           </DialogHeader>
 
           {selected && (
             <div className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <p>
-                  <strong>Nom :</strong> {selected.nom} {selected.prenom}
-                </p>
-                <p>
-                  <strong>Date de naissance :</strong>{" "}
-                  {selected.dateNaissance}
-                </p>
-                <p>
-                  <strong>Email parent :</strong> {selected.email}
-                </p>
-                <p>
-                  <strong>Téléphone parent :</strong> {selected.tel}
-                </p>
-                <p>
-                  <strong>Adresse :</strong> {selected.adresse}
-                </p>
-                <p>
-                  <strong>Retards :</strong> {selected.retards}
-                </p>
-                <p>
-                  <strong>Absences :</strong> {selected.absences}
-                </p>
-                <p>
-                  <strong>Droit d'inscription :</strong>{" "}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="text-muted-foreground text-xs">Nom complet</p>
+                  <p className="font-semibold">{selected.nom} {selected.prenom}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Date de naissance</p>
+                  <p className="font-semibold">{selected.dateNaissance}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Email parent</p>
+                  <p className="font-semibold">{selected.email}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Téléphone parent</p>
+                  <p className="font-semibold">{selected.tel}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Adresse</p>
+                  <p className="font-semibold">{selected.adresse}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Classe</p>
+                  <p className="font-semibold">{selected.classe}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Retards</p>
+                  <p className="font-semibold text-orange-600">{selected.retards}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Absences</p>
+                  <p className="font-semibold text-red-600">{selected.absences}</p>
+                </div>
+                <div className="sm:col-span-2">
+                  <p className="text-muted-foreground text-xs">Statut d'inscription</p>
                   <Badge
-                    variant={
-                      selected.droitInscription ? "default" : "destructive"
-                    }
-                    className={selected.droitInscription ? "bg-green-400" : "bg-red-400"}
-
+                    variant={selected.droitInscription ? "default" : "destructive"}
+                    className={selected.droitInscription ? "bg-green-600" : "bg-red-600"}
                   >
-                    {selected.droitInscription ? "Payé" : "Non payé"}
-                    
+                    {selected.droitInscription ? "Payé ✓" : "Non payé ✗"}
                   </Badge>
-                </p>
+                </div>
               </div>
 
+              <Separator />
+
               <div>
-                <h3 className="font-semibold mb-3">
-                  Écolage
-                </h3>
-                <div className="flex flex-wrap gap-2">
+                <h3 className="font-semibold mb-3 text-foreground">Statut du paiement par mois</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                   {months.map((m) => (
                     <Badge
                       key={m}
-                      variant={
-                        selected.ecolage[m] ? "default" : "secondary"
-                      }
-                      className={"shadow-md " + (selected.ecolage[m] ? "bg-green-400 " : "bg-red-500 text-white")}
-
+                      variant={selected.ecolage[m] ? "default" : "secondary"}
+                      className={`rounded-md text-xs ${
+                        selected.ecolage[m]
+                          ? "bg-green-600 text-white"
+                          : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
+                      }`}
                     >
-                      {m.charAt(0).toUpperCase() + m.slice(1)} :{" "}
-                      {selected.ecolage[m] ? "Payé" : "Non payé"}
+                      {m.charAt(0).toUpperCase() + m.slice(1).substring(0, 2)}
+                      {selected.ecolage[m] ? " ✓" : " ✗"}
                     </Badge>
                   ))}
                 </div>
