@@ -225,6 +225,8 @@ const CommunicationPage = () => {
         </div>
       )}
 
+
+
       {/* Messages Tab */}
       {activeTab === 'messages' && (
         <div className="space-y-4">
