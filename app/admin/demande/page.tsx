@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
-import { CalendarDays, Check, ClipboardClock, Hourglass, X, FileText, Users } from "lucide-react"
+import { CalendarDays, Check, ClipboardClock, Hourglass, X, FileText, Users, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from '@/components/ui/badge'
 import { Separator } from "@/components/ui/separator"
@@ -53,6 +53,7 @@ const RequestItem = ({ item, type }: { item: any; type: 'demande' | 'absence' | 
         </p>
       </div>
       <div className="flex gap-2">
+        <Button><Eye/></Button>
         <Button
           size="sm"
           className="h-8 w-8 p-0 bg-green-600 hover:bg-green-700 text-white rounded-md"
@@ -125,6 +126,7 @@ const page = () => {
             <div className="space-y-3 max-h-96 overflow-y-auto">
               {demandeItem.map((item, idx) => (
                 <RequestItem key={idx} item={item} type="demande" />
+                
               ))}
             </div>
           </CardContent>
