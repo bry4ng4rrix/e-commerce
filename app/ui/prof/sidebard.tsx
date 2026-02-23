@@ -29,8 +29,6 @@ interface SidebarProps {
 const menuItems = [
   { name: "Tableau de bord", href: "/prof", icon: Home },
   { name: "Étudiants", href: "/prof/etudiants", icon: Users }, 
-  { name: "Document", href: "/prof/document", icon: BookText },
-  { name: "Demande", href: "/prof/demande", icon: LayersPlus },
   { name: "Communication", href: "/prof/comunication", icon: Mail },
   { name: "Profile", href: "/prof/profile", icon: Settings }
   ]
