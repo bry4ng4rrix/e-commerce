@@ -30,7 +30,7 @@ interface Grade {
 
 const EtudiantsPage = () => {
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
+  const [selectedClass, setSelectedClass] = useState('all')
   const [showDetailsDialog, setShowDetailsDialog] = useState(false)
   const [selectedSubject, setSelectedSubject] = useState('mathematiques')
   const [showAddGradeDialog, setShowAddGradeDialog] = useState(false)
@@ -98,6 +98,10 @@ const EtudiantsPage = () => {
         <h1 className="text-3xl font-bold">Gestion des Étudiants</h1>
         <p className="text-muted-foreground mt-1">Consultez et gérez les informations des étudiants</p>
       </div>
+
+
+        {/* tabs classe  */}
+
 
       {/* Grade Management */}
       <Card>
@@ -194,13 +198,7 @@ const EtudiantsPage = () => {
                       >
                         <Eye className="w-4 h-4" />
                       </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => console.log('Edit student:', student.nom)}
-                      >
-                        <Edit className="w-4 h-4" />
-                      </Button>
+                      
                     </div>
                   </TableCell>
                 </TableRow>
@@ -422,6 +420,7 @@ const EtudiantsPage = () => {
             </Button>
           </DialogFooter>
         </DialogContent>
+        </Dialog>
       {/* Edit Grade Dialog */}
       <Dialog open={showEditGradeDialog} onOpenChange={setShowEditGradeDialog}>
         <DialogContent>
