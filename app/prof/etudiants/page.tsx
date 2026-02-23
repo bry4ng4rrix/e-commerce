@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Search, Plus, Edit, Eye, X } from 'lucide-react'
+import { Search, Plus, Edit, Eye, X, Calendar, TrendingUp, BookOpen, Download, BarChart3 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -34,6 +34,8 @@ const EtudiantsPage = () => {
   const [showDetailsDialog, setShowDetailsDialog] = useState(false)
   const [selectedSubject, setSelectedSubject] = useState('mathematiques')
   const [showAddGradeDialog, setShowAddGradeDialog] = useState(false)
+  const [showEditGradeDialog, setShowEditGradeDialog] = useState(false)
+  const [editingGrade, setEditingGrade] = useState<Grade | null>(null)
   const [newGrade, setNewGrade] = useState({ t1: '', t2: '', t3: '' })
 
   // Mock data
@@ -106,7 +108,7 @@ const EtudiantsPage = () => {
               </div>
               <div className="flex gap-2">
                 <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-                  <SelectTrigger className="w-[200px]">
+                  <SelectTrigger className="w-50">
                     <SelectValue placeholder="Matière" />
                   </SelectTrigger>
                   <SelectContent>
@@ -194,77 +196,159 @@ const EtudiantsPage = () => {
         </CardContent>
       </Card>
 
-      {/* Subject Tabs for Grades */}
+  
    
 
       {/* Student Details Dialog */}
       <Dialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Détails de l'étudiant</DialogTitle>
-            <DialogDescription>
-              Informations complètes et notes de {selectedStudent?.nom}
-            </DialogDescription>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex-1">
+              <DialogTitle className="text-xl">Détails de l'étudiant</DialogTitle>
+              <DialogDescription className="text-sm">
+                Informations complètes et notes de {selectedStudent?.nom}
+              </DialogDescription>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              className="sm:hidden"
+              onClick={() => setShowDetailsDialog(false)}
+            >
+              <X className="w-4 h-4" />
+            </Button>
           </DialogHeader>
+          
           <div className="space-y-6">
-            {/* Student Info */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Nom</p>
-                <p className="text-lg font-semibold">{selectedStudent?.nom}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Matricule</p>
-                <p className="text-lg font-semibold">{selectedStudent?.matricule}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Classe</p>
-                <p className="text-lg font-semibold">{selectedStudent?.classe}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Total absences</p>
-                <p className="text-lg font-semibold">{selectedStudent?.absence}</p>
-              </div>
+            {/* Student Info Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
+                      <span className="text-muted-foreground font-bold text-sm">JD</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-lg">{selectedStudent?.nom}</p>
+                      <p className="text-sm text-muted-foreground">{selectedStudent?.matricule}</p>
+                    </div>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    <p>Identité</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
+                      <span className="text-muted-foreground font-bold text-sm">2C</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-lg">{selectedStudent?.classe}</p>
+                      <p className="text-sm text-muted-foreground">2nde C</p>
+                    </div>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    <p>Classe</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
+                      <Calendar className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-lg">{selectedStudent?.absence}</p>
+                      <p className="text-sm text-muted-foreground">absences</p>
+                    </div>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    <p>Absences</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
+                      <BarChart3 className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-lg">12.8</p>
+                      <p className="text-sm text-muted-foreground">moyenne</p>
+                    </div>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    <p>Moyenne générale</p>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
-            {/* Grades by Subject */}
+            {/* Grades by Subject - Responsive Grid */}
             <div>
-              <h3 className="text-lg font-semibold mb-4">Notes par matière</h3>
-              <div className="space-y-4">
-                {grades.map((grade) => (
-                  <Card key={grade.id}>
-                    <CardContent className="p-4">
-                      <div className="flex justify-between items-center mb-3">
-                        <h4 className="font-semibold">
-                          {subjects.find(s => s.id === grade.subject)?.name}
-                        </h4>
-                        <Badge className="bg-primary/10 text-primary">
-                          Moyenne: {grade.average.toFixed(1)}/20
-                        </Badge>
-                      </div>
-                      <div className="grid grid-cols-3 gap-4">
-                        <div className="text-center">
-                          <p className="text-sm text-muted-foreground">T1</p>
-                          <p className="text-xl font-bold">{grade.t1}</p>
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <BookOpen className="w-5 h-5" />
+                Notes par matière
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {grades.map((grade) => {
+                  const subjectInfo = subjects.find(s => s.id === grade.subject)
+                  const gradeColor = grade.average >= 14 ? 'text-green-600' : grade.average >= 10 ? 'text-yellow-600' : 'text-red-600'
+                  return (
+                    <Card key={grade.id} className="hover:shadow-lg transition-shadow">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-lg flex items-center gap-2">
+                            {subjectInfo?.name}
+                            <Badge className={grade.average >= 14 ? 'bg-green-100 text-green-800' : grade.average >= 10 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}>
+                              {grade.average.toFixed(1)}/20
+                            </Badge>
+                          </CardTitle>
+                          <Button variant="ghost" size="sm">
+                            <Edit className="w-4 h-4" />
+                          </Button>
                         </div>
-                        <div className="text-center">
-                          <p className="text-sm text-muted-foreground">T2</p>
-                          <p className="text-xl font-bold">{grade.t2}</p>
+                        <CardDescription className="text-xs">
+                          Performance {grade.average >= 14 ? 'excellente' : grade.average >= 10 ? 'bonne' : 'à améliorer'}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <div className="grid grid-cols-3 gap-2 text-center">
+                          <div>
+                            <p className="text-xs text-muted-foreground mb-1">T1</p>
+                            <p className={`text-2xl font-bold ${gradeColor}`}>{grade.t1}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground mb-1">T2</p>
+                            <p className={`text-2xl font-bold ${gradeColor}`}>{grade.t2}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground mb-1">T3</p>
+                            <p className={`text-2xl font-bold ${gradeColor}`}>{grade.t3}</p>
+                          </div>
                         </div>
-                        <div className="text-center">
-                          <p className="text-sm text-muted-foreground">T3</p>
-                          <p className="text-xl font-bold">{grade.t3}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDetailsDialog(false)}>
+          
+          <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:justify-end">
+            <Button variant="outline" onClick={() => setShowDetailsDialog(false)} className="w-full sm:w-auto">
               Fermer
+            </Button>
+            <Button onClick={() => console.log('Export student data')}>
+              <Download className="w-4 h-4 mr-2" />
+              Exporter
             </Button>
           </DialogFooter>
         </DialogContent>
