@@ -195,66 +195,7 @@ const EtudiantsPage = () => {
       </Card>
 
       {/* Subject Tabs for Grades */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Gestion des Notes</CardTitle>
-          <CardDescription>Ajoutez et consultez les notes par matière</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs value={selectedSubject} onValueChange={setSelectedSubject}>
-            <TabsList className="grid w-full grid-cols-4">
-              {subjects.map((subject) => (
-                <TabsTrigger key={subject.id} value={subject.id}>
-                  {subject.name}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-
-            {/* Grades Table for Selected Subject */}
-            <TabsContent value={selectedSubject}>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold">
-                    Notes - {subjects.find(s => s.id === selectedSubject)?.name}
-                  </h3>
-                  <Button onClick={() => setShowAddGradeDialog(true)}>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Ajouter une note
-                  </Button>
-                </div>
-                
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Étudiant</TableHead>
-                      <TableHead className="text-center">T1</TableHead>
-                      <TableHead className="text-center">T2</TableHead>
-                      <TableHead className="text-center">T3</TableHead>
-                      <TableHead className="text-center">Moyenne</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {students.map((student) => {
-                      const studentGrade = grades.find(g => g.subject === selectedSubject)
-                      return (
-                        <TableRow key={student.id}>
-                          <TableCell className="font-medium">{student.nom}</TableCell>
-                          <TableCell className="text-center">{studentGrade?.t1 || '-'}</TableCell>
-                          <TableCell className="text-center">{studentGrade?.t2 || '-'}</TableCell>
-                          <TableCell className="text-center">{studentGrade?.t3 || '-'}</TableCell>
-                          <TableCell className="text-center font-bold">
-                            {studentGrade?.average.toFixed(1) || '-'}
-                          </TableCell>
-                        </TableRow>
-                      )
-                    })}
-                  </TableBody>
-                </Table>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+   
 
       {/* Student Details Dialog */}
       <Dialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog}>
