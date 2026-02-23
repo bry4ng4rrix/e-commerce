@@ -234,8 +234,8 @@ const EtudiantsPage = () => {
           <DialogHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex-1">
               <DialogTitle className="text-xl">Détails de l'étudiant</DialogTitle>
-              <DialogDescription className="text-sm">
-                Informations complètes et notes de {selectedStudent?.nom}
+              <DialogDescription>
+                Informations complètes et notes de {selectedClass === 'all' ? 'tous les étudiants' : `l'étudiant de la classe ${selectedClass}`}
               </DialogDescription>
             </div>
             <Button 
