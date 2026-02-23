@@ -61,12 +61,17 @@ const EtudiantsPage = () => {
     { id: 4, subject: 'sciences', t1: 15, t2: 15.5, t3: 15, average: 15.2 },
   ]
 
-  const filteredStudents = students.filter(student => 
-    student.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.matricule.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const filteredStudents = students.filter(student => {
+    const matchesSearch = student.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         student.matricule.toLowerCase().includes(searchTerm.toLowerCase())
+    
+    const matchesClass = selectedClass === 'all' || student.classe === selectedClass
+    
+    return matchesSearch && matchesClass
+  })
 
   const handleViewDetails = (student: Student) => {
+    setSelectedClass(student.classe)
     setSelectedStudent(student)
     setShowDetailsDialog(true)
   }
@@ -161,55 +166,67 @@ const EtudiantsPage = () => {
         </CardContent>
       </Card>
 
-      {/* Students Table */}
+      {/* Class Selection Tabs */}
       <Card>
         <CardHeader>
           <CardTitle>Liste des étudiants</CardTitle>
           <CardDescription>{filteredStudents.length} étudiants trouvés</CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nom</TableHead>
-                <TableHead>Matricule</TableHead>
-                <TableHead>Classe</TableHead>
-                <TableHead>Absences</TableHead>
-                <TableHead className="text-center">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredStudents.map((student) => (
-                <TableRow key={student.id}>
-                  <TableCell className="font-medium">{student.nom}</TableCell>
-                  <TableCell>{student.matricule}</TableCell>
-                  <TableCell>{student.classe}</TableCell>
-                  <TableCell>
-                    <Badge variant={student.absence > 3 ? 'destructive' : 'secondary'}>
-                      {student.absence} absences
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <div className="flex items-center justify-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleViewDetails(student)}
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Button>
-                      
-                    </div>
-                  </TableCell>
+          <Tabs value={selectedClass} onValueChange={setSelectedClass}>
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="all">Toutes les classes</TabsTrigger>
+              <TabsTrigger value="2nde C">2nde C</TabsTrigger>
+              <TabsTrigger value="2nde D">2nde D</TabsTrigger>
+              <TabsTrigger value="1ere">1ère</TabsTrigger>
+            </TabsList>
+
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Nom</TableHead>
+                  <TableHead>Matricule</TableHead>
+                  <TableHead>Classe</TableHead>
+                  <TableHead>Absences</TableHead>
+                  <TableHead className="text-center">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredStudents.map((student) => (
+                  <TableRow key={student.id}>
+                    <TableCell className="font-medium">{student.nom}</TableCell>
+                    <TableCell>{student.matricule}</TableCell>
+                    <TableCell>{student.classe}</TableCell>
+                    <TableCell>
+                      <Badge variant={student.absence > 3 ? 'destructive' : 'secondary'}>
+                        {student.absence} absences
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleViewDetails(student)}
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => console.log('Edit student:', student.nom)}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Tabs>
         </CardContent>
       </Card>
-
-  
-   
 
       {/* Student Details Dialog */}
       <Dialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog}>
