@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Search, Plus, Edit, Eye, X, Calendar, TrendingUp, BookOpen, Download, BarChart3 } from 'lucide-react'
+import { Search, Plus, Edit, Eye, X, Calendar, TrendingUp, BookOpen, Download, BarChart3, Trash2 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -74,6 +74,20 @@ const EtudiantsPage = () => {
   const handleAddGrade = () => {
     console.log('Adding grade for student:', selectedStudent?.nom, 'Subject:', selectedSubject)
     setShowAddGradeDialog(false)
+    setNewGrade({ t1: '', t2: '', t3: '' })
+  }
+
+  const handleEditGrade = (grade: Grade) => {
+    setEditingGrade(grade)
+    setShowEditGradeDialog(true)
+    setNewGrade({ t1: grade.t1.toString(), t2: grade.t2.toString(), t3: grade.t3.toString() })
+  }
+
+  const handleUpdateGrade = () => {
+    if (!editingGrade) return
+    console.log('Updating grade:', editingGrade)
+    setShowEditGradeDialog(false)
+    setEditingGrade(null)
     setNewGrade({ t1: '', t2: '', t3: '' })
   }
 
@@ -311,9 +325,14 @@ const EtudiantsPage = () => {
                               {grade.average.toFixed(1)}/20
                             </Badge>
                           </CardTitle>
-                          <Button variant="ghost" size="sm">
-                            <Edit className="w-4 h-4" />
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button variant="ghost" size="sm" onClick={() => handleEditGrade(grade)}>
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button variant="ghost" size="sm" onClick={() => console.log('Delete grade:', grade)}>
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
                         </div>
                         <CardDescription className="text-xs">
                           Performance {grade.average >= 14 ? 'excellente' : grade.average >= 10 ? 'bonne' : 'à améliorer'}
@@ -400,6 +419,55 @@ const EtudiantsPage = () => {
             </Button>
             <Button onClick={handleAddGrade}>
               Ajouter
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      {/* Edit Grade Dialog */}
+      <Dialog open={showEditGradeDialog} onOpenChange={setShowEditGradeDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Modifier une note</DialogTitle>
+            <DialogDescription>
+              Modifiez les notes pour {subjects.find(s => s.id === selectedSubject)?.name}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <label className="text-sm font-medium">Note T1</label>
+                <Input
+                  type="number"
+                  placeholder="Note T1"
+                  value={newGrade.t1}
+                  onChange={(e) => setNewGrade({...newGrade, t1: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Note T2</label>
+                <Input
+                  type="number"
+                  placeholder="Note T2"
+                  value={newGrade.t2}
+                  onChange={(e) => setNewGrade({...newGrade, t2: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Note T3</label>
+                <Input
+                  type="number"
+                  placeholder="Note T3"
+                  value={newGrade.t3}
+                  onChange={(e) => setNewGrade({...newGrade, t3: e.target.value})}
+                />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowEditGradeDialog(false)}>
+              Annuler
+            </Button>
+            <Button onClick={handleUpdateGrade}>
+              Mettre à jour
             </Button>
           </DialogFooter>
         </DialogContent>
